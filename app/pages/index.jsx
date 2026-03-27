@@ -296,11 +296,32 @@ export default class PreviewPage extends React.Component {
         disableFilename: options.disable_filename
       }, () => {
         if (refreshContent) {
+          const renderMermaid = async () => {
+            // eslint-disable-next-line
+            if (typeof mermaid === 'undefined') {
+              return
+            }
+
+            // eslint-disable-next-line
+            mermaid.initialize({ startOnLoad: false, theme: (this.state.theme || 'light'), ...(options.maid || {}) })
+
+            const nodes = document.querySelectorAll('.mermaid')
+            if (nodes.length === 0) {
+              return
+            }
+
+            // eslint-disable-next-line
+            if (typeof mermaid.run === 'function') {
+              // eslint-disable-next-line
+              await mermaid.run({ nodes })
+            } else {
+              // eslint-disable-next-line
+              mermaid.init(undefined, nodes)
+            }
+          }
+
           try {
-            // eslint-disable-next-line
-            mermaid.initialize({ theme: (this.state.theme || 'light'), ...(options.maid || {}) })
-            // eslint-disable-next-line
-            mermaid.init(undefined, document.querySelectorAll('.mermaid'))
+            renderMermaid().catch(() => { })
           } catch (e) { }
 
           chart.render()
