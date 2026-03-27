@@ -15,6 +15,11 @@
     --color-border-tertiary: #d1d5da;
     --color-kbd-foreground: #444d56;
     --color-markdown-blockquote-border: #dfe2e5;
+    --color-markdown-alert-note: #0969da;
+    --color-markdown-alert-tip: #1a7f37;
+    --color-markdown-alert-important: #8250df;
+    --color-markdown-alert-warning: #9a6700;
+    --color-markdown-alert-caution: #cf222e;
     --color-markdown-table-border: #dfe2e5;
     --color-markdown-table-tr-border: #c6cbd1;
     --color-markdown-code-bg: #1b1f230d;
@@ -31,6 +36,11 @@
     --color-border-tertiary: #6e7681;
     --color-kbd-foreground: #b1bac4;
     --color-markdown-blockquote-border: #3b434b;
+    --color-markdown-alert-note: #4493f8;
+    --color-markdown-alert-tip: #3fb950;
+    --color-markdown-alert-important: #ab7df8;
+    --color-markdown-alert-warning: #d29922;
+    --color-markdown-alert-caution: #f85149;
     --color-markdown-table-border: #3b434b;
     --color-markdown-table-tr-border: #272c32;
     --color-markdown-code-bg: #f0f6fc26;
@@ -188,6 +198,72 @@
   padding: 0 15px;
   color: var(--color-text-tertiary);
   border-left: 4px solid var(--color-markdown-blockquote-border);
+}
+.markdown-body blockquote.markdown-alert {
+  padding: 0.5rem 1rem;
+  color: inherit;
+}
+.markdown-body blockquote.markdown-alert > :first-child {
+  margin-top: 0;
+}
+.markdown-body blockquote.markdown-alert > :last-child {
+  margin-bottom: 0;
+}
+.markdown-body blockquote.markdown-alert .markdown-alert-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+}
+.markdown-body blockquote.markdown-alert .markdown-alert-title:before {
+  font-size: 1rem;
+}
+.markdown-body blockquote.markdown-alert-note {
+  border-left-color: var(--color-markdown-alert-note);
+}
+.markdown-body blockquote.markdown-alert-note .markdown-alert-title {
+  color: var(--color-markdown-alert-note);
+}
+.markdown-body blockquote.markdown-alert-note .markdown-alert-title:before {
+  content: "ⓘ";
+}
+.markdown-body blockquote.markdown-alert-tip {
+  border-left-color: var(--color-markdown-alert-tip);
+}
+.markdown-body blockquote.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-markdown-alert-tip);
+}
+.markdown-body blockquote.markdown-alert-tip .markdown-alert-title:before {
+  content: "💡";
+}
+.markdown-body blockquote.markdown-alert-important {
+  border-left-color: var(--color-markdown-alert-important);
+}
+.markdown-body blockquote.markdown-alert-important .markdown-alert-title {
+  color: var(--color-markdown-alert-important);
+}
+.markdown-body blockquote.markdown-alert-important .markdown-alert-title:before {
+  content: "❕";
+}
+.markdown-body blockquote.markdown-alert-warning {
+  border-left-color: var(--color-markdown-alert-warning);
+}
+.markdown-body blockquote.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-markdown-alert-warning);
+}
+.markdown-body blockquote.markdown-alert-warning .markdown-alert-title:before {
+  content: "⚠";
+}
+.markdown-body blockquote.markdown-alert-caution {
+  border-left-color: var(--color-markdown-alert-caution);
+}
+.markdown-body blockquote.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-markdown-alert-caution);
+}
+.markdown-body blockquote.markdown-alert-caution .markdown-alert-title:before {
+  content: "⛔";
 }
 .markdown-body table {
   display: block;

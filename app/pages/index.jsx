@@ -9,6 +9,7 @@ import footnote from 'markdown-it-footnote'
 import markdownItAnchor from 'markdown-it-anchor'
 import markdownItToc from 'markdown-it-toc-done-right'
 import markdownDeflist from 'markdown-it-deflist'
+import githubAlerts from './githubAlerts'
 
 import mk from './katex'
 import chart from './chart'
@@ -223,6 +224,7 @@ export default class PreviewPage extends React.Component {
         .use(taskLists)
         .use(markdownDeflist)
         .use(footnote)
+        .use(githubAlerts)
         .use(image)
         .use(markdownImSize)
         .use(linenumbers)
