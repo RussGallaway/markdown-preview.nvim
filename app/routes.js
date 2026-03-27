@@ -2,6 +2,8 @@ const fs = require('fs')
 const path = require('path')
 const logger = require('./lib/util/logger')('app/routes')
 
+const markdownFilePattern = /\.(md|markdown|mdown|mkdn|mdwn)$/i
+
 const routes = []
 
 const use = function (route) {
@@ -9,8 +11,9 @@ const use = function (route) {
 }
 
 // /page/:number
+// /:number
 use((req, res, next) => {
-  if (/\/page\/\d+/.test(req.asPath)) {
+  if (/^(\/page)?\/\d+$/.test(req.asPath)) {
     return fs.createReadStream('./out/index.html').pipe(res)
   }
   next()
@@ -118,6 +121,54 @@ use(async (req, res, next) => {
     }
   }
   next()
+})
+
+// linked markdown files
+use(async (req, res, next) => {
+  if (!markdownFilePattern.test(req.asPath) || /^\/page\/\d+$/.test(req.asPath)) {
+    next()
+    return
+  }
+
+  const sourceBufnr = Number(req.bufnr)
+  if (!sourceBufnr) {
+    next()
+    return
+  }
+
+  const plugin = req.plugin
+  const buffers = await plugin.nvim.buffers
+  const sourceBuffer = buffers.find(b => b.id === sourceBufnr)
+  if (!sourceBuffer) {
+    next()
+    return
+  }
+
+  const sourcePath = await sourceBuffer.name
+  if (!sourcePath) {
+    next()
+    return
+  }
+
+  const relativePath = decodeURIComponent(
+    req.asPath
+      .replace(/^\/page\//, '')
+      .replace(/^\//, '')
+  )
+  const targetPath = path.resolve(path.dirname(sourcePath), relativePath)
+
+  if (!markdownFilePattern.test(targetPath) || !fs.existsSync(targetPath) || fs.statSync(targetPath).isDirectory()) {
+    next()
+    return
+  }
+
+  const escapedPath = await plugin.nvim.call('fnameescape', [targetPath])
+  await plugin.nvim.command(`edit ${escapedPath}`)
+
+  const currentBuffer = await plugin.nvim.buffer
+  res.statusCode = 302
+  res.setHeader('Location', `/page/${currentBuffer.id}`)
+  res.end()
 })
 
 // 404
