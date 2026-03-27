@@ -7,7 +7,8 @@ const os_1 = tslib_1.__importDefault(require("os"));
 const path_1 = tslib_1.__importDefault(require("path"));
 const MAX_LOG_SIZE = 1024 * 1024;
 const MAX_LOG_BACKUPS = 10;
-const LOG_FILE_PATH = process.env.NVIM_MKDP_LOG_FILE || path_1.default.join(os_1.default.tmpdir(), 'mkdp-nvim.log');
+const LOG_FILE_NAME = `mkdp-nvim-${process.getuid ? process.getuid() : os_1.default.userInfo().username}.log`;
+const LOG_FILE_PATH = process.env.NVIM_MKDP_LOG_FILE || path_1.default.join(os_1.default.tmpdir(), LOG_FILE_NAME);
 const level = process.env.NVIM_MKDP_LOG_LEVEL || 'info';
 if (level === 'debug') {
     fs_1.default.writeFileSync(LOG_FILE_PATH, '', 'utf8');

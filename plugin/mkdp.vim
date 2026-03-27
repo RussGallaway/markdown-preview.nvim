@@ -132,19 +132,28 @@ function! s:init_command() abort
   inoremap <buffer> <silent> <Plug>MarkdownPreviewToggle <Esc>:MarkdownPreviewToggle<CR>
 endfunction
 
+function! s:is_recognized_filetype() abort
+  for l:ft in split(&filetype, '\.')
+    if index(g:mkdp_filetypes, l:ft) !=# -1
+      return v:true
+    endif
+  endfor
+  return v:false
+endfunction
+
 function! s:init() abort
   augroup mkdp_init
     autocmd!
     if g:mkdp_command_for_global
       autocmd BufEnter * :call s:init_command()
     else
-      autocmd BufEnter,FileType * if index(g:mkdp_filetypes, &filetype) !=# -1 | call s:init_command() | endif
+      autocmd BufEnter,FileType * if s:is_recognized_filetype() | call s:init_command() | endif
     endif
     if g:mkdp_auto_start
-      execute 'autocmd BufEnter *.{md,mkd,mdown,mkdn,mdwn,' . join(g:mkdp_filetypes, ',') . '} call mkdp#util#open_preview_page()'
+      autocmd BufEnter,FileType * if s:is_recognized_filetype() | call mkdp#util#open_preview_page() | endif
     endif
     if g:mkdp_combine_preview && g:mkdp_combine_preview_auto_refresh
-      execute 'autocmd BufEnter *.{md,mkd,mdown,mkdn,mdwn,' . join(g:mkdp_filetypes, ',') . '} call mkdp#util#combine_preview_refresh()'
+      autocmd BufEnter,FileType * if s:is_recognized_filetype() | call mkdp#util#combine_preview_refresh() | endif
     endif
   augroup END
 endfunction
